@@ -78,8 +78,10 @@ export const getCategoriesAndDocuments = async () => {
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) => {
     if (!userAuth) return;
     // 3 arguments: database, name of collection, identifier = tells us what is doc
+    // Pointer where the data will be placed
     const userDocRef = doc(db, 'users', userAuth.uid);
-    // Doc reference pointing where the data will be placed
+
+    // Where the data actually is
     const userSnapshot = await getDoc(userDocRef);
 
     // if user doedn't exist in db, create it
@@ -101,7 +103,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) 
         }
     }
 
-    return userDocRef;
+    return userSnapshot;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
@@ -117,3 +119,18 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 export const signOutUser = async () => await signOut(auth);
 
 export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
+
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+            auth,
+            (userAuth) => {
+                // As soon as we have a value unsubscribe() - we are closing the listener.
+                // If we don't do so, there will be a memory leak
+                unsubscribe();
+                resolve(userAuth);
+            },
+            reject,
+        )
+    })
+}
