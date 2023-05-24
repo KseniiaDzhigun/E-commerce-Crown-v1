@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from 'react-router-dom';
 
-import { createUserDocumentFromAuth, getCurrentUser, onAuthStateChangedListener } from "./utils/firebase/firebase";
+// import { createUserDocumentFromAuth, getCurrentUser, onAuthStateChangedListener } from "./utils/firebase/firebase";
 import Home from './routes/Home/Home';
 import Navigation from './routes/Navigation/Navigation';
 import Authentication from './routes/Authentication/Authentication';
